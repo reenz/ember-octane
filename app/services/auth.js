@@ -6,19 +6,20 @@ const AUTH_KEY = 'test-id';
 
 export default class AuthService extends Service {
     @service router;
+    @service cookies;
 
     get currentUserId() {
-        return window.localStorage.getItem(AUTH_KEY);
+        return this.cookies.read(AUTH_KEY);
     }
 
     loginUserWithId(userId) {
-        window.localStorage.setItem(AUTH_KEY, userId);
+        this.cookies.write(AUTH_KEY, userId);
         this.router.transitionTo('teams');
     }
 
     @action
     logout() {
-        window.localStorage.removeItem(AUTH_KEY);
+        this.cookies.write(AUTH_KEY, null);
         this.router.transitionTo('login');        
     }
 }
